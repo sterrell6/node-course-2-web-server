@@ -1,7 +1,8 @@
 const express = require('express');
 const hbs = require('hbs');
 const fs = require('fs');
-const port = process.PORT || 3000;;
+
+const port = process.env.PORT || 3000;
 var app = express();
 
 hbs.registerPartials(__dirname + '/views/partials')
@@ -14,17 +15,16 @@ app.use((req, res, next) => {
     console.log(log);
     fs.appendFile('server.log', log + '\n');
     next();
-
-
 });
-//app.use((req, res, next) => {
-//    res.render('maintenance.hbs');
-//});
+
+// app.use((req, res, next) => {
+//   res.render('maintenance.hbs');
+// });
+
 app.use(express.static(__dirname + '/public'));
 
-
 hbs.registerHelper('getCurrentYear', () => {
-    return new Date().getFullYear()
+    return new Date().getFullYear();
 });
 
 hbs.registerHelper('screamIt', (text) => {
@@ -37,12 +37,7 @@ app.get('/', (req, res) => {
         welcomeMessage: 'Welcome to my website'
     });
 });
-app.get('/', (req, res) => {
-    res.render('maintenace.hbs', {
-        pageTitle: 'Maintenace Page',
-        welcomeMessage: 'We will be back soon'
-    });
-});
+
 app.get('/about', (req, res) => {
     res.render('about.hbs', {
         pageTitle: 'About Page'
@@ -57,5 +52,5 @@ app.get('/bad', (req, res) => {
 });
 
 app.listen(port, () => {
-    console.log(`Server is up on ${port}`);
+    console.log(`Server is up on port ${port}`);
 });
